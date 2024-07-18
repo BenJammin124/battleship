@@ -1,7 +1,20 @@
-export class Ships {
-  constructor(length) {
+export class Ship {
+  constructor(name, length) {
+    this.name = name;
     this.length = length;
-    this.hits = length - length;
+    this.hits = 0;
     this.sunk = false;
+    this.coords = new Set();
+  }
+
+  hit() {
+    this.hits += 1;
+    this.isSunk();
+  }
+
+  isSunk() {
+    if (this.hits >= this.length) {
+      this.sunk = true;
+    }
   }
 }
