@@ -5,16 +5,20 @@ export class Ship {
     this.hits = 0;
     this.sunk = false;
     this.coords = new Set();
+    this.placed = false;
   }
 
   hit() {
     this.hits += 1;
-    this.isSunk();
+    if (this.isSunk()) {
+      return this.name;
+    }
   }
 
   isSunk() {
     if (this.hits >= this.length) {
       this.sunk = true;
+      return true;
     }
   }
 }

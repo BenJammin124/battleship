@@ -20,6 +20,7 @@ describe("Game board creation and functions", () => {
       length: 5,
       hits: 0,
       sunk: false,
+      placed: false,
       coords: expect.any(Set),
     });
   });
@@ -71,25 +72,35 @@ describe("Game board creation and functions", () => {
     gameBoard.receiveAttack(0, 3);
     gameBoard.receiveAttack(0, 4);
 
-    gameBoard.placeShip("destroyer", 1, 0, "horizontal");
-    gameBoard.receiveAttack(1, 0);
-    gameBoard.receiveAttack(1, 1);
-    gameBoard.receiveAttack(1, 2);
-
-    gameBoard.placeShip("battleship", 2, 0, "horizontal");
+    gameBoard.placeShip("destroyer", 2, 0, "horizontal");
     gameBoard.receiveAttack(2, 0);
     gameBoard.receiveAttack(2, 1);
     gameBoard.receiveAttack(2, 2);
-    gameBoard.receiveAttack(2, 3);
 
-    gameBoard.placeShip("submarine", 3, 0, "horizontal");
-    gameBoard.receiveAttack(3, 0);
-    gameBoard.receiveAttack(3, 1);
-    gameBoard.receiveAttack(3, 2);
-
-    gameBoard.placeShip("patrol boat", 4, 0, "horizontal");
+    gameBoard.placeShip("battleship", 4, 0, "horizontal");
     gameBoard.receiveAttack(4, 0);
     gameBoard.receiveAttack(4, 1);
+    gameBoard.receiveAttack(4, 2);
+    gameBoard.receiveAttack(4, 3);
+
+    gameBoard.placeShip("submarine", 6, 0, "horizontal");
+    gameBoard.receiveAttack(6, 0);
+    gameBoard.receiveAttack(6, 1);
+    gameBoard.receiveAttack(6, 2);
+
+    gameBoard.placeShip("patrol boat", 8, 0, "horizontal");
+    gameBoard.receiveAttack(8, 0);
+    gameBoard.receiveAttack(8, 1);
     expect(gameBoard.checkIfAllShipsSunk()).toBeTruthy();
+  });
+
+  it("prints board", () => {
+    // gameBoard.printBoard();
+    expect(gameBoard.board[0][0].value).toBe("~");
+  });
+
+  it("auto place ships", () => {
+    expect(gameBoard.autoPlaceShips()).toBe("placed");
+    // gameBoard.printBoard();
   });
 });

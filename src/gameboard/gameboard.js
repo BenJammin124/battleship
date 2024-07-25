@@ -3,6 +3,7 @@ import { Ship } from "../battleship/ship";
 function Cell() {
   let value = "~";
   let hit = false;
+
   return {
     value,
     hit,
@@ -29,6 +30,32 @@ export class GameBoard {
     };
   }
 
+  markBufferZone(name, rowStart, colStart, orientation) {
+    //iterate around the ship to mark buffer zone
+    const startRow = rowStart - 1 < 0 ? 0 : rowStart - 1;
+    const endRow = Math.min(
+      9,
+      orientation === "horizontal"
+        ? rowStart + 1
+        : rowStart + this.ships[name].length
+    );
+    const startCol = colStart - 1 < 0 ? 0 : colStart - 1;
+    const endCol = Math.min(
+      9,
+      orientation === "vertical"
+        ? colStart + 1
+        : colStart + this.ships[name].length
+    );
+
+    for (let i = startRow; i <= endRow; i++) {
+      for (let j = startCol; j <= endCol; j++) {
+        if (this.board[i][j].value === "~") {
+          this.board[i][j].value = "*";
+        }
+      }
+    }
+  }
+
   placeShip(name, rowStart, colStart, orientation) {
     if (rowStart <= -1 || colStart <= -1 || rowStart >= 10 || colStart >= 10) {
       return "Out of bounds";
@@ -40,8 +67,7 @@ export class GameBoard {
           colStart + i >= 10 ||
           this.board[rowStart][colStart + i].value !== "~"
         ) {
-          // console.log("Invalid placement");
-          return;
+          return false;
         }
       }
       for (let i = 0; i < this.ships[name].length; i++) {
@@ -54,8 +80,7 @@ export class GameBoard {
           rowStart + i >= 10 ||
           this.board[rowStart + i][colStart].value !== "~"
         ) {
-          // console.log("Invalid Placement");
-          return;
+          return false;
         }
       }
       for (let i = 0; i < this.ships[name].length; i++) {
@@ -63,11 +88,53 @@ export class GameBoard {
         this.board[rowStart + i][colStart].value = name[0];
       }
     }
+    this.markBufferZone(name, rowStart, colStart, orientation);
+    this.ships[name].placed = true;
+    return true;
+  }
+
+  autoPlaceShips() {
+    const ships = this.ships;
+    // const board = this.board;
+
+    const randomOrientation = () => {
+      let orientation;
+      const random = Math.floor(Math.random() * 2);
+      if (random === 0) {
+        orientation = "horizontal";
+      } else {
+        orientation = "vertical";
+      }
+      return orientation;
+    };
+
+    const randomNumber = () => {
+      const coord = Math.floor(Math.random() * 10);
+      return coord;
+    };
+
+    Object.keys(ships).forEach((key) => {
+      let ship = ships[key];
+
+      while (!ship.placed) {
+        this.placeShip(
+          ship.name,
+          randomNumber(),
+          randomNumber(),
+          randomOrientation()
+        );
+      }
+    });
+    return "placed";
   }
 
   receiveAttack(x, y) {
     if (this.board[x][y].hit) {
-      return "That position has already been attacked!";
+      console.log(`row:${x}, col: ${y}`);
+      console.log(this.board[x][y].hit);
+      console.log(this.ships);
+      console.log(this.board);
+      return "Try again";
     } else {
       this.board[x][y].hit = true;
       for (const shipName in this.ships) {
@@ -79,6 +146,18 @@ export class GameBoard {
       }
       return "Miss!";
     }
+  }
+
+  checkForAvailableSquares() {
+    const freeSpaces = [];
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        if (this.board[i][j].hit === false) {
+          freeSpaces.push([i, j]);
+        }
+      }
+    }
+    return freeSpaces;
   }
 
   checkIfAllShipsSunk() {
@@ -94,5 +173,12 @@ export class GameBoard {
     } else {
       return false;
     }
+  }
+
+  printBoard() {
+    const boardWithCellValues = this.board.map((row) =>
+      row.map((cell) => cell.hit)
+    );
+    console.log(boardWithCellValues);
   }
 }
