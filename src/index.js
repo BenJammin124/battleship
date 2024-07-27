@@ -83,11 +83,21 @@ export function GameController(
       } else {
         const moves = attackBoard.checkForAvailableSquares();
         const [row, col] = moves[Math.floor(Math.random() * moves.length)];
-
+        switchPlayerTurn();
         result = attackBoard.receiveAttack(row, col);
         return "Trying again";
       }
     }
+  };
+
+  const checkForWin = () => {
+    if (
+      userPlayer.board.checkIfAllShipsSunk() ||
+      computerPlayer.board.checkIfAllShipsSunk()
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return {
@@ -99,6 +109,7 @@ export function GameController(
     players,
     randomNumber,
     availableComputerMove,
+    checkForWin,
   };
 }
 
@@ -108,9 +119,11 @@ export function ScreenController(player) {
   const playerTurnDiv = document.querySelector("#player-turn");
 
   const game = GameController(player);
+  playerTurnDiv.textContent = game.getActivePlayer().name;
 
   const updateUserBoard = () => {
     const userBoard = game.players[0].board.board;
+    userBoardDiv.textContent = "";
 
     userBoard.forEach((row, rowIndex) => {
       row.forEach((column, colIndex) => {
@@ -121,6 +134,9 @@ export function ScreenController(player) {
         if (column.value !== "~" && column.value !== "*") {
           cellButton.classList.add("ship");
         }
+        if (column.hit) {
+          cellButton.classList.add("miss");
+        }
         userBoardDiv.appendChild(cellButton);
       });
     });
@@ -128,6 +144,8 @@ export function ScreenController(player) {
 
   const updateComputerBoard = () => {
     const computerBoard = game.players[1].board.board;
+    // const computerShips = game.players[1].board.ships;
+    computerBoardDiv.textContent = "";
 
     computerBoard.forEach((row, rowIndex) => {
       row.forEach((column, colIndex) => {
@@ -138,10 +156,53 @@ export function ScreenController(player) {
         if (column.value !== "~" && column.value !== "*") {
           cellButton.classList.add("ship");
         }
+        if (column.hit) {
+          cellButton.classList.add("miss");
+          if (
+            (column.value === "c" ||
+              column.value === "b" ||
+              column.value === "d" ||
+              column.value === "p" ||
+              column.value === "s") &&
+            column.hit
+          ) {
+            cellButton.classList.remove("miss");
+            cellButton.classList.add("hit");
+          }
+        }
         computerBoardDiv.appendChild(cellButton);
       });
     });
   };
+
+  function computerTurn() {
+    const [row, col] = game.availableComputerMove();
+    game.playRound(row, col);
+    updateUserBoard();
+    computerBoardDiv.addEventListener("click", clickHandlerBoard);
+  }
+
+  function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row;
+    const selectedColumn = e.target.dataset.column;
+
+    if (!selectedColumn) return;
+    if (!selectedRow) return;
+
+    game.playRound(selectedRow, selectedColumn);
+    computerBoardDiv.removeEventListener("click", clickHandlerBoard);
+    updateUserBoard();
+    updateComputerBoard();
+    if (game.getActivePlayer() === game.players[1]) {
+      setTimeout(computerTurn, 2000);
+    } else {
+      computerBoardDiv.addEventListener("click", clickHandlerBoard);
+    }
+
+    console.log(selectedRow, selectedColumn);
+  }
+
+  computerBoardDiv.addEventListener("click", clickHandlerBoard);
   updateUserBoard();
   updateComputerBoard();
   // game.placeShips();
