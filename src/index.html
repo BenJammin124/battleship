@@ -10,13 +10,129 @@
       <header>
         <h1 class="title" id="title">BATTLESHIP</h1>
       </header>
+      <div class="hint">
+        <ul>
+          <li class="hintLi">
+            Drag Ships onto board. Click ships to rotate before dragging.<br />
+            Once ships are placed they cannot move
+          </li>
+        </ul>
+      </div>
+      <div class="set-ships board-flex">
+        <div class="board" id="set-user-ships"></div>
+        <div class="ships-to-set">
+          <h3>Place your battleships</h3>
+          <div class="select-ships">
+            <div
+              class="container"
+              data-id="carrier"
+              data-orient="horizontal"
+              draggable="true"
+            >
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div
+              class="container"
+              data-id="battleship"
+              data-orient="horizontal"
+              draggable="true"
+            >
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div
+              class="container"
+              data-id="destroyer"
+              data-orient="horizontal"
+              draggable="true"
+            >
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div
+              class="container"
+              data-id="submarine"
+              data-orient="horizontal"
+              draggable="true"
+            >
+              <div class="part"></div>
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+            <div
+              class="container"
+              data-id="patrol-boat"
+              data-orient="horizontal"
+              draggable="true"
+            >
+              <div class="part"></div>
+              <div class="part"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="random-button">Random</button>
+        <button class="reset-button">Reset</button>
+        <button class="start-button">Start Game</button>
+      </div>
+
       <main id="content">
-        <div id="player-turn"></div>
+        <div class="player-turn" id="player-turn"></div>
         <div class="board-flex" id="game-wrapper">
+          <div class="left">
+            <h2 class="ship-container-title">Your Ships</h2>
+            <div class="ships-container-player" id="your-ships">
+              <div class="flex-ship" id="carrier">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="battleship">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="destroyer">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="submarine">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="patrol-boat">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+            </div>
+          </div>
           <div class="board" id="user-board"></div>
           <div class="board" id="attack-board"></div>
+          <div class="right">
+            <h2 class="ship-container-title">Computer ships</h2>
+            <div class="ships-container-computer" id="computer-ships"></div>
+          </div>
         </div>
       </main>
+      <dialog class="winner-modal">
+        <div class="modal-flex">
+          <h2 class="winner"></h2>
+          <button class="play-again">Play again</button>
+        </div>
+      </dialog>
       <footer></footer>
     </div>
   </body>

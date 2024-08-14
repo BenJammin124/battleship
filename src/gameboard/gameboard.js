@@ -26,12 +26,11 @@ export class GameBoard {
       battleship: new Ship("battleship", 4),
       destroyer: new Ship("destroyer", 3),
       submarine: new Ship("submarine", 3),
-      "patrol boat": new Ship("patrol boat", 2),
+      "patrol-boat": new Ship("patrol-boat", 2),
     };
   }
 
   markBufferZone(name, rowStart, colStart, orientation) {
-    //iterate around the ship to mark buffer zone
     const startRow = rowStart - 1 < 0 ? 0 : rowStart - 1;
     const endRow = Math.min(
       9,
@@ -67,6 +66,8 @@ export class GameBoard {
           colStart + i >= 10 ||
           this.board[rowStart][colStart + i].value !== "~"
         ) {
+          console.log(this.board[rowStart][colStart].value);
+          console.log(false);
           return false;
         }
       }
@@ -95,7 +96,6 @@ export class GameBoard {
 
   autoPlaceShips() {
     const ships = this.ships;
-    // const board = this.board;
 
     const randomOrientation = () => {
       let orientation;
@@ -173,6 +173,31 @@ export class GameBoard {
     } else {
       return false;
     }
+  }
+
+  resetGame() {
+    const ships = this.ships;
+    this.board = [];
+    for (let i = 0; i < 10; i++) {
+      this.board[i] = [];
+      for (let j = 0; j < 10; j++) {
+        this.board[i].push(Cell());
+      }
+    }
+    Object.keys(ships).forEach((key) => {
+      let ship = ships[key];
+      ship.reset();
+    });
+  }
+
+  shipsHits() {
+    const ships = this.ships;
+    let shipHitsArr = [];
+    Object.keys(ships).forEach((key) => {
+      let ship = ships[key];
+      shipHitsArr.push([ship.name, ship.getHits(), ship.length]);
+    });
+    return shipHitsArr;
   }
 
   printBoard() {

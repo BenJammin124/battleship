@@ -21,4 +21,19 @@ export class Ship {
       return true;
     }
   }
+
+  reset() {
+    this.hits = 0;
+    this.sunk = false;
+    this.coords = new Set();
+    this.placed = false;
+  }
+
+  getHits() {
+    return this.hits;
+  }
+
+  resetCoords() {
+    this.coords = new Set();
+  }
 }
