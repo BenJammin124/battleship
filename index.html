@@ -13,10 +13,52 @@
       <main id="content">
         <div id="player-turn"></div>
         <div class="board-flex" id="game-wrapper">
+          <div>
+            <h2>Your Ships</h2>
+            <div class="ships-container" id="your-ships">
+              <div class="flex-ship" id="carrier">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="battleship">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="destroyer">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="submarine">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+              <div class="flex-ship" id="patrol-boat">
+                <div class="ship health"></div>
+                <div class="ship health"></div>
+              </div>
+            </div>
+          </div>
           <div class="board" id="user-board"></div>
           <div class="board" id="attack-board"></div>
         </div>
+
+        <div>
+          <button>Randomize Ships</button>
+        </div>
+
+        <div>Computer ships</div>
       </main>
+      <dialog class="winner-modal">
+        <h2 class="winner"></h2>
+        <button class="play-again">Play again</button>
+      </dialog>
       <footer></footer>
     </div>
   </body>
